@@ -96,5 +96,15 @@ public class Client {
             e.printStackTrace();
         }
     }
-
+    
+    // Creates a cert for the client with script
+    private boolean createCert() {
+    	return true;
+    }
+    
+    // Send a string to the server?
+    private String sendString(String send) {
+    	return "";
+    }
+    
 }
