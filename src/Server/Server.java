@@ -58,7 +58,7 @@ public class Server implements Runnable {
 
     public static void main(String args[]) {
         System.out.println("\nServer Started\n");
-        int port = -1;
+        int port = 6000;
         if (args.length >= 1) {
             port = Integer.parseInt(args[0]);
         }

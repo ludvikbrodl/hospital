@@ -25,11 +25,11 @@ public class Client {
         }
         if (args.length < 2) {
             System.out.println("USAGE: java client host port");
-            System.exit(-1);
+           // System.exit(-1);
         }
         try { /* get input parameters */
-            host = args[0];
-            port = Integer.parseInt(args[1]);
+            host = "localhost"; //args[0]
+            port =  6000; //Integer.parseInt(args[1]);
         } catch (IllegalArgumentException e) {
             System.out.println("USAGE: java client host port");
             System.exit(-1);
