@@ -2,10 +2,13 @@ package Client;
 
 import java.net.*;
 import java.io.*;
+
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
+
 import java.security.KeyStore;
 import java.security.cert.*;
+import java.util.Scanner;
 
 /*
  * This example shows how to set up a key manager to perform client
@@ -42,13 +45,40 @@ public class Client {
                 KeyStore ks = KeyStore.getInstance("JKS");
                 KeyStore ts = KeyStore.getInstance("JKS");
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+                
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
                 ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
 				ts.load(new FileInputStream("clienttruststore"), password); // truststore password (storepass);
-				kmf.init(ks, password); // user password (keypass)
+				
+				String userName = "";
+				String userPass = "";
+				
+					Scanner scan = new Scanner(System.in);
+					while (userName.equals("")) {
+						System.out.println("Input Username: ");
+						userName = scan.nextLine();
+						System.out.println(userName);
+						System.out.println(ks.containsAlias(userName));
+						if (!ks.containsAlias(userName)) {
+							userName = "";
+						} else {
+							System.out.println("Input password");
+							userPass = scan.nextLine();					
+							try {
+								kmf.init(ks, userPass.toCharArray()); // user password (keypass)
+							} catch (Exception e) {
+								System.out.println("Wrong password");
+								userName = "";
+							}
+							
+						}
+					}
+				
+				
 				tmf.init(ts); // keystore can be used as truststore here
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
+				
                 factory = ctx.getSocketFactory();
             } catch (Exception e) {
                 throw new IOException(e.getMessage());
