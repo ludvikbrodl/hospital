@@ -54,6 +54,7 @@ public class Client {
 				String userName = "";
 				String userPass = "";
 				
+					@SuppressWarnings("resource")
 					Scanner scan = new Scanner(System.in);
 					while (userName.equals("")) {
 						System.out.println("Input Username: ");
