@@ -22,8 +22,14 @@ public class Database {
 		rights = new HashMap<X509Certificate, String>();
 		files = new ArrayList<File>();
 		
-		//Tests
-		files.add(new File("test.txt"));
+		// Load all files from the database
+		File directory = new File("database/");
+		File[] fList = directory.listFiles();
+		for (File f : fList) {
+			if (f.isFile()) {
+				files.add(f);
+			}
+		}
 		
 		// Should log who called the method?
 	}
@@ -75,7 +81,7 @@ public class Database {
 		}
 		if (file != null) {
 			// Remove the file from the database. Log it.
-			if (files.remove(file)) {
+			if (files.remove(file) && file.delete()) {
 				Audit.log("The file " + fileName + " was removed from the database");
 				return true;
 			} else {
