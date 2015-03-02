@@ -30,6 +30,7 @@ public class Audit {
 				
 				// Write to the audit
 				out.write(time + " - " + sentence + "\n");
+				out.newLine();
 				
 				// Close the file
 				out.close();
