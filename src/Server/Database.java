@@ -59,8 +59,8 @@ public class Database {
 					}
 				}
 			} catch (FileNotFoundException e) {
-				// If it fails just set to null again
-				result = null;
+				// If it fails just set to empty again
+				result = "";
 			}
 		}
 		
