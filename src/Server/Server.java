@@ -41,9 +41,10 @@ public class Server implements Runnable {
             while ((clientMsg = in.readLine()) != null) {
             	String rep = reply.CreateReply(clientMsg, cert);
             	
+            	
                 System.out.println("received '" + clientMsg + "' from client");
                 System.out.print("sending '" + rep + "' to client...");
-				out.println(rep);
+				out.println(rep.replaceAll("\n", "@£"));
 				out.flush();
                 System.out.println("done\n");
 			}

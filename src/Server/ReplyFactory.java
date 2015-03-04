@@ -28,8 +28,8 @@ public class ReplyFactory {
 				// Get the three fields and remove the ! marker
 				String lines[] = file_content.split("\\r?\\n");
 				patientID = lines[0].substring(1).trim();
-				nurseID = lines[1].substring(1).trim();
-				divisionID = lines[2].substring(1).trim();
+				nurseID = lines[2].substring(1).trim();
+				divisionID = lines[3].substring(1).trim();
 			}
 			
 			String[] ra = getRights(cert, patientID, nurseID, divisionID);
@@ -59,10 +59,11 @@ public class ReplyFactory {
 					&& split[0].equalsIgnoreCase("create") && split.length > 3) {
 				String nurseId = split[2].replace('-', ' ').trim();
 				String divisionId = split[3].replace('-', ' ').trim();
+				String doctorId = actor;
 
 				// Creates an entry in the database
 				result = "Created an new entry: "
-						+ database.createEntry(fileName, nurseId, divisionId, actor);
+						+ database.createEntry(fileName, doctorId, nurseId, divisionId, actor);
 			} else if (rights.charAt(3) == '1'
 					&& split[0].equalsIgnoreCase("remove") && split.length > 1) {
 
@@ -120,7 +121,7 @@ public class ReplyFactory {
 			// Check nurse
 			if (type.equalsIgnoreCase("nurse")) {
 				if (actor.equalsIgnoreCase(nurseID)) {
-					return new String[] { "1000", actor };
+					return new String[] { "1100", actor };
 				} else {
 					return new String[] { "0000", actor };
 				}
@@ -134,9 +135,7 @@ public class ReplyFactory {
 					return new String[] { "0000", actor };
 				}
 			}
-
+			return new String[] {"1111", actor};
 		}
-
-		return new String[] { "1111", "test" };
 	}
 }

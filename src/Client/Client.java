@@ -112,8 +112,10 @@ public class Client {
                 out.println(msg);
                 out.flush();
                 System.out.println("done");
-
-                System.out.println("received '" + in.readLine() + "' from server\n");
+                System.out.println("Received!");
+                String res = in.readLine();
+                
+               System.out.println("received '" + res.replaceAll("@£", "\n") + "' from server\n");
             }
             in.close();
 			out.close();

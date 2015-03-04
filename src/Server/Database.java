@@ -139,12 +139,13 @@ public class Database {
 	/**
 	 * Creates a new entry in the database with the specified data.
 	 * @param fileName - The name of the new file to be added to the database.
+	 * @param doctorId - ID of the doctor for the patient.
 	 * @param nurseId - ID of the nurse for the patient.
 	 * @param divisionId - ID of the division in which the nurse is operating in.
 	 * @param actor - the user who did the action.
 	 * @return
 	 */
-	public boolean createEntry(String fileName, String nurseId, String divisionId, String actor) {
+	public boolean createEntry(String fileName, String doctorId, String nurseId, String divisionId, String actor) {
 		BufferedWriter out = null;
 		try {
 			// Append data with true in filewriter
@@ -153,6 +154,8 @@ public class Database {
 			out = new BufferedWriter(fstream);
 			
 			out.write("!" + fileName);
+			out.newLine();
+			out.write("!" + doctorId);
 			out.newLine();
 			out.write("!" + nurseId);
 			out.newLine();
