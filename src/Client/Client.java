@@ -56,6 +56,9 @@ public class Client {
 				
 					@SuppressWarnings("resource")
 					Scanner scan = new Scanner(System.in);
+					System.out.println("Usernames are the names of the keystores with the keys, ie: clientkeystore_nurse4");
+					System.out.println("All passwords are the the string after the '_' sign");
+					System.out.println("except for gov which password is passgov");
 					while (true) {
 						System.out.println("Input Username: ");
 						userName = scan.nextLine();
