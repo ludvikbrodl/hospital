@@ -22,6 +22,7 @@ public class Server implements Runnable {
             SSLSession session = socket.getSession();
             X509Certificate cert = (X509Certificate)session.getPeerCertificateChain()[0];
             String subject = cert.getSubjectDN().getName();
+            System.out.println(session.getCipherSuite());
     	    numConnectedClients++;
             System.out.println("client connected");
             System.out.println("client name (cert subject DN field): " + subject);
@@ -83,10 +84,10 @@ public class Server implements Runnable {
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 KeyStore ks = KeyStore.getInstance("JKS");
 				KeyStore ts = KeyStore.getInstance("JKS");
-                char[] password = "password".toCharArray();
-
+                char[] password = "passserver".toCharArray();
+                
                 ks.load(new FileInputStream("serverkeystore"), password);  // keystore password (storepass)
-                ts.load(new FileInputStream("servertruststore"), password); // truststore password (storepass)
+                ts.load(new FileInputStream("servertruststore"), "password".toCharArray()); // truststore password (storepass)
                 kmf.init(ks, password); // certificate password (keypass)
                 tmf.init(ts);  // possible to use keystore as truststore here
                 ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);

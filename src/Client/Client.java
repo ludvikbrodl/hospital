@@ -5,6 +5,7 @@ import java.io.*;
 
 import javax.net.ssl.*;
 import javax.security.cert.X509Certificate;
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 
 import java.security.KeyStore;
 import java.security.cert.*;
@@ -48,7 +49,6 @@ public class Client {
                 
                 TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
                 SSLContext ctx = SSLContext.getInstance("TLS");
-                ks.load(new FileInputStream("clientkeystore"), password);  // keystore password (storepass)
 				ts.load(new FileInputStream("clienttruststore"), password); // truststore password (storepass);
 				
 				String userName = "";
@@ -56,30 +56,23 @@ public class Client {
 				
 					@SuppressWarnings("resource")
 					Scanner scan = new Scanner(System.in);
-					while (userName.equals("")) {
+					while (true) {
 						System.out.println("Input Username: ");
 						userName = scan.nextLine();
-						System.out.println(userName);
-						System.out.println(ks.containsAlias(userName));
-						if (!ks.containsAlias(userName)) {
-							userName = "";
-						} else {
-							System.out.println("Input password");
-							userPass = scan.nextLine();					
-							try {
-								kmf.init(ks, userPass.toCharArray()); // user password (keypass)
-							} catch (Exception e) {
-								System.out.println("Wrong password");
-								userName = "";
-							}
-							
+						System.out.println("Input password");
+						userPass = scan.nextLine();			
+						try {
+							ks.load(new FileInputStream(userName), userPass.toCharArray());  // keystore password (storepass)
+							break;
+						} catch (FileNotFoundException fileE) {
+							System.out.println("Username does not exist");
+						} catch (IOException ioe) {
+							System.out.println("Incorrect Password or username is not a keystore");
 						}
 					}
-				
-				
-				tmf.init(ts); // keystore can be used as truststore here
+				kmf.init(ks, userPass.toCharArray()); // certificate password (keypass)
+				tmf.init(ts);
 				ctx.init(kmf.getKeyManagers(), tmf.getTrustManagers(), null);
-				
                 factory = ctx.getSocketFactory();
             } catch (Exception e) {
                 throw new IOException(e.getMessage());

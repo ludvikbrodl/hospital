@@ -4,10 +4,10 @@ echo Y | keytool -importcert -alias CAcert -file CA.crt -keystore clientkeystore
 
 
 #Add gov
-			keytool -genkeypair -keystore clientkeystore -alias aliasgov -dname CN=gov/,O=Government,L=Lund,ST=Skane,C=SE -storepass password -keypass passgov
+			keytool -genkeypair -keystore clientkeystore -alias aliasgov -dname CN=gov/,O=Government,L=Lund,ST=Skane,C=SE -storepass password -keypass password
 
-			keytool -certreq -file certreq.csr -alias aliasgov -keystore clientkeystore -storepass password -keypass passgov
+			keytool -certreq -file certreq.csr -alias aliasgov -keystore clientkeystore -storepass password -keypass password
 
 			openssl x509 -req -in certreq.csr -CA CA.crt -CAkey CAkey.pem -CAcreateserial -out signedCSR.csr -passin pass:password
 
-			echo Y | 	keytool -importcert -alias aliasgov -file signedCSR.csr -keystore clientkeystore -storepass password -keypass passgov
+			echo Y | 	keytool -importcert -alias aliasgov -file signedCSR.csr -keystore clientkeystore -storepass password -keypass password
