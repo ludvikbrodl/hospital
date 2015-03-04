@@ -50,7 +50,10 @@ public class ReplyFactory {
 				result = database.getFile(fileName, false);
 			} else if (rights.charAt(1) == '1'
 					&& split[0].equalsIgnoreCase("write") && split.length > 2) {
-				String data = split[2].replace('-', ' ').trim();
+				String data = split[2].replace('-', ' ');
+				for (int i = 3; i < split.length; i++) {
+					data += (" " + split[i]);
+				}
 
 				// Appends the data to the file
 				result = "Data appended to file: "
