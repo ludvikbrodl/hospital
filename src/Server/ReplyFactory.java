@@ -110,7 +110,7 @@ public class ReplyFactory {
 			String actor = CN_value[1];
 
 			// Get the division
-			String division = fields[1].substring(3);
+			String division = fields[1].substring(4);
 
 			// Check doctor
 			if (type.equalsIgnoreCase("doctor")) {
@@ -123,7 +123,8 @@ public class ReplyFactory {
 
 			// Check nurse
 			if (type.equalsIgnoreCase("nurse")) {
-				if (actor.equalsIgnoreCase(nurseID)) {
+				System.out.println(division+" : "+divisionID);
+				if (actor.equalsIgnoreCase(nurseID) || division.equalsIgnoreCase(divisionID)) {
 					return new String[] { "1100", actor };
 				} else {
 					return new String[] { "0000", actor };
