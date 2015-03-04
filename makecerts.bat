@@ -18,7 +18,7 @@ echo Y | keytool -importcert -alias CAcert -file CA.crt -keystore clientkeystore
 #Add doctors
 for i in `seq 1 4`; 
         do
-        	keytool -genkeypair -keystore clientkeystore -alias aliasdoc$i -dname CN=doc$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passdoc$i
+        	keytool -genkeypair -keystore clientkeystore -alias aliasdoc$i -dname CN=doctor/doctor$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passdoc$i
 
 			keytool -certreq -file certreq.csr -alias aliasdoc$i -keystore clientkeystore -storepass password -keypass passdoc$i
 
@@ -30,7 +30,7 @@ for i in `seq 1 4`;
 #Add nurses
 for i in `seq 1 8`; 
         do
-        	keytool -genkeypair -keystore clientkeystore -alias aliasnurse$i -dname CN=nurse$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passnurse$i
+        	keytool -genkeypair -keystore clientkeystore -alias aliasnurse$i -dname CN=nurse/nurse$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passnurse$i
 
 			keytool -certreq -file certreq.csr -alias aliasnurse$i -keystore clientkeystore -storepass password -keypass passnurse$i
 
@@ -42,7 +42,7 @@ for i in `seq 1 8`;
 #Add patients
 for i in `seq 1 5`; 
         do
-        	keytool -genkeypair -keystore clientkeystore -alias aliaspatient$i -dname CN=patient$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passpatient$i
+        	keytool -genkeypair -keystore clientkeystore -alias aliaspatient$i -dname CN=patient/patient$i,OU=${divisions[($i-1) % ${#divisions[@]}]},O=Hospital,L=Lund,ST=Skane,C=SE -storepass password -keypass passpatient$i
 
 			keytool -certreq -file certreq.csr -alias aliaspatient$i -keystore clientkeystore -storepass password -keypass passpatient$i
 
