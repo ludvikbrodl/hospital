@@ -31,18 +31,18 @@ public class Database {
 			}
 		}
 		
-		// Should log who called the method?
 	}
 	
 	/**
 	 * Get the content of a file in the database.
 	 * @param fileName - the name of the file to be read.
+	 * @param marker - if special markers for header should be showed or not.
 	 * @return returns a string containing the data from the file. Empty string if no file.
 	 */
-	public String getFile(String fileName) {
+	public String getFile(String fileName, boolean marker) {
 		File file = null;
 		for (File f : files) {
-			if (f.getName().equals(fileName)) {
+			if (f.getName().equals(fileName + ".txt")) {
 				file = f;
 			}
 		}
@@ -54,6 +54,9 @@ public class Database {
 				
 				while (scan.hasNext()) {
 					String line = scan.nextLine();
+					if (line.startsWith("!") && marker) {
+						result += line + "\n";
+					}
 					if (!line.startsWith("!")) {
 						result += line + "\n";
 					}
@@ -70,22 +73,23 @@ public class Database {
 	/**
 	 * Remove the file from the database.
 	 * @param fileName - the name of the file to be removed.
+	 * @param actor - the user who did the action.
 	 * @return returns true if file was removed, else false.
 	 */
-	public boolean removeFile(String fileName) {
+	public boolean removeFile(String fileName, String actor) {
 		File file = null;
 		for (File f : files) {
-			if (f.getName().equals(fileName)) {
+			if (f.getName().equals(fileName + ".txt")) {
 				file = f;
 			}
 		}
 		if (file != null) {
 			// Remove the file from the database. Log it.
 			if (files.remove(file) && file.delete()) {
-				Audit.log("The file " + fileName + " was removed from the database");
+				Audit.log(actor + " removed the file " + fileName + ".txt from the database.");
 				return true;
 			} else {
-				Audit.log("The file " + fileName + " was not removed from the databse.");
+				Audit.log(actor + " tried to remove the file " + fileName + ".txt from the database.");
 				return false;
 			}
 		} else {
@@ -97,12 +101,13 @@ public class Database {
 	 * Appends some content to a file in the database.
 	 * @param fileName - the filename of the file to be written.
 	 * @param content - the content that will be appended to the file.
+	 * @param actor - the user who did the action.
 	 * @return returns true if successfully could write to file, else false.
 	 */
-	public boolean writeFile(String fileName, String content) {
+	public boolean writeFile(String fileName, String content, String actor) {
 		File file = null;
 		for (File f : files) {
-			if (f.getName().equals(fileName)) {
+			if (f.getName().equals(fileName + ".txt")) {
 				file = f;
 			}
 		}
@@ -110,7 +115,7 @@ public class Database {
 			BufferedWriter out = null;
 			try {
 				// Append data with true in filewriter
-				FileWriter fstream = new FileWriter(fileName, true);
+				FileWriter fstream = new FileWriter("database/" + fileName + ".txt", true);
 				out = new BufferedWriter(fstream);
 				
 				// Append content
@@ -118,7 +123,7 @@ public class Database {
 				out.append(content);
 				
 				// Log the action
-				Audit.log("Content was appended to " + fileName);
+				Audit.log(actor + " appended content to " + fileName + ".txt");
 				
 				// Close the file
 				out.close();
@@ -136,14 +141,14 @@ public class Database {
 	 * @param fileName - The name of the new file to be added to the database.
 	 * @param nurseId - ID of the nurse for the patient.
 	 * @param divisionId - ID of the division in which the nurse is operating in.
-	 * @param password - password for the patient
+	 * @param actor - the user who did the action.
 	 * @return
 	 */
-	public boolean createEntry(String fileName, String nurseId, String divisionId, String password) {
+	public boolean createEntry(String fileName, String nurseId, String divisionId, String actor) {
 		BufferedWriter out = null;
 		try {
 			// Append data with true in filewriter
-			File f = new File(fileName);
+			File f = new File("database/" + fileName + ".txt");
 			FileWriter fstream = new FileWriter(f, true);
 			out = new BufferedWriter(fstream);
 			
@@ -152,12 +157,9 @@ public class Database {
 			out.write("!" + nurseId);
 			out.newLine();
 			out.write("!" + divisionId);
-			out.newLine();
-			out.write("!" + password); 		// Hash the passwords with salt??????
 			
-															// Should log who created the entry??????
 			// Audit - created a new entry in the database
-			String log = "A new entry was created in the database: "
+			String log = actor + " created a new entry in the database: "
 					+ fileName + " " + nurseId + " " + divisionId;
 			Audit.log(log);
 			
@@ -170,14 +172,5 @@ public class Database {
 			e.printStackTrace();
 		}
 		return true;
-	}
-	
-	/**
-	 * Get the rights from the certificate
-	 * @param cert - certificate.
-	 * @return returns the rights for the certificate. Empty string if none.
-	 */
-	public String getRights(X509Certificate cert) {
-		return "";
 	}
 }

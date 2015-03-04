@@ -9,9 +9,13 @@ import javax.security.cert.X509Certificate;
 public class Server implements Runnable {
     private ServerSocket serverSocket = null;
     private static int numConnectedClients = 0;
+    
+    // Connection with database
+    private ReplyFactory reply;
 
     public Server(ServerSocket ss) throws IOException {
         serverSocket = ss;
+        reply = new ReplyFactory();
         newListener();
     }
 
@@ -34,10 +38,11 @@ public class Server implements Runnable {
 
             String clientMsg = null;
             while ((clientMsg = in.readLine()) != null) {
-			    String rev = new StringBuilder(clientMsg).reverse().toString();
+            	String rep = reply.CreateReply(clientMsg, cert);
+            	
                 System.out.println("received '" + clientMsg + "' from client");
-                System.out.print("sending '" + rev + "' to client...");
-				out.println(rev);
+                System.out.print("sending '" + rep + "' to client...");
+				out.println(rep);
 				out.flush();
                 System.out.println("done\n");
 			}
